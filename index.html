@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Smart Trolley Scanner</title>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+
+<body>
+  <h2>Scan Product Barcode</h2>
+
+  <div id="reader" style="width:300px;"></div>
+
+  <p>Scanned Code: <span id="result">None</span></p>
+
+  <script>
+    function onScanSuccess(decodedText, decodedResult) {
+      document.getElementById("result").innerText = decodedText;
+
+      // Send data to ESP32
+      fetch("http://192.168.4.1/scan?code=" + decodedText)
+        .then(response => console.log("Sent to ESP32"))
+        .catch(error => console.log(error));
+    }
+
+    let scanner = new Html5QrcodeScanner(
+      "reader",
+      { fps: 10, qrbox: 250 }
+    );
+
+    scanner.render(onScanSuccess);
+  </script>
+</body>
+</html>
