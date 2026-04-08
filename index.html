@@ -22,6 +22,7 @@
       width: 100%;
       max-width: 320px;
       margin: auto;
+      display: none;
     }
 
     #result {
@@ -29,12 +30,24 @@
       font-weight: bold;
       color: green;
     }
+
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+    }
   </style>
 </head>
 
 <body>
 
-  <h2>Scan Product Barcode</h2>
+  <h2>Smart Trolley Scanner</h2>
+
+  <button onclick="startScanner()">Scan</button>
 
   <div id="reader"></div>
 
@@ -42,6 +55,8 @@
   <p id="result">None</p>
 
   <script>
+    let html5QrCode;
+
     function onScanSuccess(decodedText) {
       document.getElementById("result").innerText = decodedText;
 
@@ -49,16 +64,20 @@
         .catch(err => console.log(err));
     }
 
-    const html5QrCode = new Html5Qrcode("reader");
+    function startScanner() {
+      document.getElementById("reader").style.display = "block";
 
-    html5QrCode.start(
-      { facingMode: "environment" },
-      {
-        fps: 10,
-        qrbox: { width: 250, height: 250 }
-      },
-      onScanSuccess
-    ).catch(err => console.log(err));
+      html5QrCode = new Html5Qrcode("reader");
+
+      html5QrCode.start(
+        { facingMode: "environment" },
+        {
+          fps: 10,
+          qrbox: { width: 250, height: 250 }
+        },
+        onScanSuccess
+      ).catch(err => console.log(err));
+    }
   </script>
 
 </body>
